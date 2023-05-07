@@ -11,6 +11,11 @@
 1. clone 鸢尾花书项目 repo 至本项目文件夹中
 2. 运行merge.py, 项目代码及PDF归至MergedBooks文件夹下. 
 3. 安装依赖包: pip install -r libs.txt
+
+## 说明:
+1. 花书部分repo还在更新中, merge前建议pull 花书项目repo, 获取最新PDF
+2. 建议用libs.txt文件进行依赖包安装
+
 ## MergedBooks文件夹内包含PDF和repo同名文件夹
 ![image](https://user-images.githubusercontent.com/24363184/236681923-dbedcd97-e401-4d45-ab2e-40526d48297a.png)
 ## repo同名文件夹包含该repo所有代码文件
