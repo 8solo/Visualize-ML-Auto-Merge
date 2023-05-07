@@ -8,9 +8,10 @@
 
 ## 使用方法:
 ![image](https://user-images.githubusercontent.com/24363184/236681866-4d241ae0-4557-4b58-9279-bd3928b9deec.png)
-1. clone 鸢尾花书项目 repo 至本项目文件夹中
-2. 运行merge.py, 项目代码及PDF归至MergedBooks文件夹下. 
-3. 安装依赖包: pip install -r libs.txt
+1. 安装依赖包: pip install -r requirements.txt
+2. clone 鸢尾花书项目 repo 至本项目文件夹中
+3. 运行merge.py, 项目代码及PDF归至MergedBooks文件夹下. 
+4. 刷新安装缺失依赖包: pip install -r libs.txt
 
 ## 说明:
 1. 花书部分repo还在更新中, merge前建议pull 花书项目repo, 获取最新PDF
