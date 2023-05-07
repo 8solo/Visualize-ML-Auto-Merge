@@ -2,6 +2,11 @@ import os
 import json
 import shutil
 import sys
+import platform
+
+import git
+
+os_name = platform.system().lower()
 
 from PyPDF2 import PdfMerger
 
@@ -14,24 +19,30 @@ def merge_dir_pdfs(s_path, f_name, t_path='./MergedBooks/'):
     for f in fl:
         fmerger.append(f)
     if not os.path.exists(t_path):
-        os.mkdir(t_path)
+        os.makedirs(t_path)
     fmerger.write(t_path+f_name+'.pdf')
 
-def merge_dir_codes(s_path, f_name, t_path='\\MergedBooks\\'):
+def merge_dir_codes(s_path, f_name, t_path='MergedBooks'):
     cwd = os.getcwd()
     fl = [f for f in os.listdir(s_path) 
           if not f.endswith('.pdf') 
           and not f.endswith('.md') 
           and not f.endswith('.git')]
     fl = [os.path.join(s_path, fname) for fname in fl]
-    t_root_dir = cwd+t_path+f_name+'\\'
+    if os_name == 'windows':
+        t_root_dir = f'{cwd}\\{t_path}\\{f_name}\\'
+    else:
+        t_root_dir = f'{cwd}/{t_path}/{f_name}/'
     if os.path.exists(t_root_dir):
         shutil.rmtree(t_root_dir)
     if not os.path.exists(t_root_dir):
-        os.mkdir(t_root_dir)
+        os.makedirs(t_root_dir)
     for d in fl:
         for f in os.listdir(d):
-            nf = d+'\\'+f
+            if os_name == 'windows':
+                nf = d+'\\'+f
+            else:
+                nf = d+'/'+f
             shutil.copy(nf, t_root_dir+f)
 
 def get_lib_list(s_path, f_name):
@@ -43,7 +54,10 @@ def get_lib_list(s_path, f_name):
     libs = []
     for d in fl:
         for f in os.listdir(d):
-            nf = d+'\\'+f
+            if os_name == 'windows':
+                nf = d+'\\'+f
+            else:
+                nf = d+'/'+f
             if f.endswith('ipynb'):
                 nlibs = get_ipynb_lib_list(nf)
             elif f.endswith('py'):
@@ -108,16 +122,24 @@ def get_py_lib_list(fname):
 def get_dir_list():
     cwd = os.getcwd()
     fl = [f for f in os.listdir('./') if f.startswith('Book')]
-    fl = [[f, cwd + '\\' + f] for f in fl]
+    if os_name == 'windows':
+        fl = [[f, cwd + '\\' + f] for f in fl]
+    else:
+        fl = [[f, cwd + '/' + f] for f in fl]
     return fl
+def pull_repo_before_merge(fname):
+    repo = git.Repo(fname)
+    repo.remotes.origin.pull()
+    print(f'Pull {fname} success!')
 
 def merge_dirs(dir_list):
     libs = []
     for fname, fpath in dir_list:
+        # pull_repo_before_merge(fname)
+        merge_dir_codes(fpath, fname)
+        merge_dir_pdfs(fpath, fname)
         nlibs = get_lib_list(fpath, fname)
         libs.extend(nlibs)
-        # merge_dir_codes(fpath, fname)
-        # merge_dir_pdfs(fpath, fname)
     write_libs_txt(libs)
 
 if __name__ == '__main__':
