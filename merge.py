@@ -127,6 +127,7 @@ def get_dir_list():
     else:
         fl = [[f, cwd + '/' + f] for f in fl]
     return fl
+
 def pull_repo_before_merge(fname):
     repo = git.Repo(fname)
     repo.remotes.origin.pull()
@@ -140,6 +141,7 @@ def merge_dirs(dir_list):
         merge_dir_pdfs(fpath, fname)
         nlibs = get_lib_list(fpath, fname)
         libs.extend(nlibs)
+        print(f'成功合并{fname}!')
     write_libs_txt(libs)
 
 if __name__ == '__main__':
